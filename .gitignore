@@ -131,3 +131,4 @@ dmypy.json
 # Custom ingores
 .idea
 .DS_Store
+data/raw/
