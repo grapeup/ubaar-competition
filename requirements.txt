@@ -1,0 +1,16 @@
+jupyterlab==3.0.7
+
+numpy==1.20.1
+scikit-learn==0.24.1
+
+matplotlib==3.3.4
+seaborn==0.11.1
+plotly==4.12.0
+
+mlflow==1.13.1
+metaflow==2.2.7
+Flask==1.1.2
+connexion==2.7.0
+
+tqdm==4.56.2
+jdatetime

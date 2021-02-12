@@ -1,4 +1,4 @@
-## ubaar-competition
+## Ubaar Competition
 Example Data Science flow for Ubaar competition
 
 
@@ -23,3 +23,21 @@ Features extraction is performed by metaflow package
 ### Results
 
 Results are presented in `.pdf`
+
+
+### Plan
+
+[] github repo
+[] EDA - notebooks
+two kinds of EDA - for presentation
+
+FE:
+notebooks - local metaflow for FE?
+--> fe.csv
+complicated but solid
+
+Training:
+mlflow server
+ensembling
+
+Server API
