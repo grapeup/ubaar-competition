@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN, KMeans
 
 AVG_EARTH_RADIUS = 6371
 
@@ -48,9 +48,15 @@ def coords_clusters(coords, n_clusters):
     coords_flat = np.vstack((coords[['sourceLatitude', 'sourceLongitude']].values,
                              coords[['destinationLatitude', 'destinationLongitude']].values))
 
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(coords_flat)
+    model = KMeans(n_clusters=n_clusters, random_state=42).fit(coords_flat)
+    src_cluster = model.predict(coords[['sourceLatitude', 'sourceLongitude']])
+    dest_cluster = model.predict(coords[['destinationLatitude', 'destinationLongitude']])
 
-    src_cluster = kmeans.predict(coords[['sourceLatitude', 'sourceLongitude']])
-    dest_cluster = kmeans.predict(coords[['destinationLatitude', 'destinationLongitude']])
+    import time
+    start = time.time()
+    clusters = DBSCAN(eps=0.01, min_samples=100, leaf_size=30).fit_predict(coords_flat)
+    print(time.time() - start)
+    src_cluster = clusters[:len(coords)]
+    dest_cluster = clusters[len(coords):]
 
     return src_cluster, dest_cluster
