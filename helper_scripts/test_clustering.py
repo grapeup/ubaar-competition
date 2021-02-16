@@ -1,13 +1,15 @@
-from coords_features import coords_clusters
-import plotly.express as px
 
 import pandas as pd
 import os
 
+import plotly.express as px
+
+from feature_extraction.path_utils import project_root
+from feature_extraction.coords_features import coords_clusters
 
 if __name__ == '__main__':
 
-    data = pd.read_csv(os.path.join('data', 'raw', 'ubaar-competition', 'train.csv'),
+    data = pd.read_csv(os.path.join(project_root(), 'data', 'raw', 'ubaar-competition', 'train.csv'),
                        encoding="utf-8", index_col="ID")
 
     coords = data[["sourceLatitude", "sourceLongitude", "destinationLatitude", "destinationLongitude"]]
@@ -18,7 +20,8 @@ if __name__ == '__main__':
                             color='cluster_src', title="Clusters")
     fig.update_layout(mapbox_style="stamen-terrain", mapbox_zoom=2, mapbox_center_lat=41,
                       margin={"r": 0, "t": 0, "l": 0, "b": 0})
-    fig.write_html(f"data/clusters.html")
+    fig.write_html(os.path.join(project_root(), "data", "processed", "clusters.html"))
+
     fig.show()
 
 
