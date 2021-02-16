@@ -10,3 +10,7 @@ def convert_data_to_gregorian(date):
 
 def convert_date_to_day(date):
     return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%A')
+
+
+def convert_date_to_month(date):
+    return datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%B')

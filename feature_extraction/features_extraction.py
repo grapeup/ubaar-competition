@@ -1,6 +1,9 @@
 import os
-from feature_extraction.date_utils import convert_data_to_gregorian, convert_date_to_day
-from feature_extraction.coords_features import dummy_manhattan_distance, bearing_array, center_lat_feat, center_lng_feat, coords_clusters
+from feature_extraction.date_utils import convert_data_to_gregorian, convert_date_to_day, convert_date_to_month
+from feature_extraction.coords_features import dummy_manhattan_distance, bearing_array, center_lat_feat, \
+    center_lng_feat, coords_clusters_dbscan, coords_clusters_kmeans
+
+from sklearn.preprocessing import LabelEncoder
 
 from metaflow import FlowSpec, step
 import pandas as pd
@@ -23,6 +26,7 @@ class UbaarFeaturesExtraction(FlowSpec):
 
         gregorian_data = self.data['date'].apply(convert_data_to_gregorian)
         self.features['day'] = gregorian_data.apply(convert_date_to_day)
+        self.features['month'] = gregorian_data.apply(convert_date_to_month)
 
         self.next(self.get_lat_long_features)
 
@@ -34,7 +38,9 @@ class UbaarFeaturesExtraction(FlowSpec):
         self.features['center_lat'] = coords.apply(center_lat_feat, axis=1)
         self.features['center_lng'] = coords.apply(center_lng_feat, axis=1)
 
-        self.features['cluster_src'], self.features['cluster_dest'] = coords_clusters(coords, n_clusters=20)
+        self.features['cluster_src_db'], self.features['cluster_dest_db'] = coords_clusters_dbscan(coords)
+        self.features['cluster_src_km'], self.features['cluster_dest_km'] = coords_clusters_kmeans(coords,
+                                                                                                   n_clusters=120)
 
         self.next(self.add_categorical_features)
 
@@ -44,8 +50,19 @@ class UbaarFeaturesExtraction(FlowSpec):
         self.features['vehicleType'] = self.data['vehicleType']
         self.features['vehicleOption'] = self.data['vehicleOption']
 
-        cat_columns = ['vehicleType', 'vehicleOption', 'cluster_src', 'cluster_dest', 'day']
+        self.features['vehicleTypeOption'] = [a + '_' + b for a, b in zip(self.data['vehicleType'].values,
+                                                                          self.data['vehicleOption'].values)]
+
+        cat_columns_clusters = ['cluster_dest_db', 'cluster_src_db', 'cluster_src_km', 'cluster_dest_km']
+        cat_columns_date = ['day', 'month']
+        cat_columns = ['vehicleType', 'vehicleOption', 'vehicleTypeOption']
+        # cat_columns += cat_columns_clusters
+        # cat_columns += cat_columns_date
+
         self.features = pd.get_dummies(self.features, columns=cat_columns, drop_first=True)
+
+        self.features['day'] = LabelEncoder().fit_transform(self.features['day'])
+        self.features['month'] = LabelEncoder().fit_transform(self.features['month'])
 
         self.next(self.add_raw_features)
 
@@ -60,6 +77,14 @@ class UbaarFeaturesExtraction(FlowSpec):
         self.features['sourceLongitude'] = self.data['sourceLongitude']
         self.features['destinationLatitude'] = self.data['destinationLatitude']
         self.features['destinationLongitude'] = self.data['destinationLongitude']
+
+        self.features['src_dest'] = (self.data['SourceState'] == self.data['destinationState'])
+        self.features['ave_speed'] = self.data['distanceKM'] / self.data['taxiDurationMin']
+
+        import numpy as np
+        self.features['weight_dur'] = np.log((self.data['taxiDurationMin']+30*self.data['weight']))
+        self.features['weight_dist_dur'] = np.log(1. + (10. + self.data['weight']) * (100. + self.data['distanceKM']) *
+                                                  (1000. + self.data['taxiDurationMin']))
 
         self.features['price'] = self.data['price']
 
