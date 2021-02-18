@@ -5,7 +5,7 @@ import os
 import plotly.express as px
 
 from feature_extraction.path_utils import project_root
-from feature_extraction.coords_features import coords_clusters
+from feature_extraction.coords_features import coords_clusters_dbscan, coords_clusters_kmeans
 
 if __name__ == '__main__':
 
@@ -14,7 +14,8 @@ if __name__ == '__main__':
 
     coords = data[["sourceLatitude", "sourceLongitude", "destinationLatitude", "destinationLongitude"]]
 
-    coords['cluster_src'], _ = coords_clusters(coords, n_clusters=50)
+    # coords['cluster_src'], _ = coords_clusters_kmeans(coords, n_clusters=50)
+    coords['cluster_src'], _ = coords_clusters_dbscan(coords)
 
     fig = px.scatter_mapbox(coords, lat="sourceLatitude", lon="sourceLongitude", zoom=3, height=900,
                             color='cluster_src', title="Clusters")
