@@ -29,4 +29,4 @@ paths:
                   description: "Row with data as in published data"
                   type: string
                   format: application/json
-                  example: "row=960218,36.666045,48.489706,زنجان,29.600574,52.537114,فارس,1092.0,751.0,treili,kafi,20.00,0"
+                  example: "960218,36.666045,48.489706,زنجان,29.600574,52.537114,فارس,1092.0,751.0,treili,kafi,20.00,0"
