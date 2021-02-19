@@ -50,6 +50,4 @@ The example of running server is at [http://demo-dawid.rnd.grapeup.com/ui/](http
 
 and you can test it for example with a command:
 
-`curl -X POST "http://demo-dawid.rnd.grapeup.com/predict" -F "row=960218,36.666045,48.489706,زنجان,29.600574,52.537114,فارس,1092.0,751.0,treili,kafi,20.00,0"
-
-`
+`curl -X POST "http://demo-dawid.rnd.grapeup.com/predict" -F "row=960218,36.666045,48.489706,زنجان,29.600574,52.537114,فارس,1092.0,751.0,treili,kafi,20.00,0"`
