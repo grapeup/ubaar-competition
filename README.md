@@ -28,19 +28,19 @@ Modeling results are stored at [link](http://ubaar-competition-mlflow-284138417.
 
 ### Additional results
 
-Additionally there are 3 scripts in `helper_scripts/` directory. They visualize a few aspects in
+Additionally, there are 3 scripts in `helper_scripts/` directory. They visualize a few aspects in
 transports localisations:
 - `helper_scripts/compare_train_test_localisations.py` - assure all localisations are covered 
-between train and test sets (generalisation on new transport sources)
-- `helper_scripts/prices_vis.py` - average price per city visualised on a map
+between the train and test sets (generalization on new transport sources)
+- `helper_scripts/prices_vis.py` - average price per city visualized on a map
 - `helper_scripts/test_clustering.py` - script for clustering analysis
 
 
-### Results
+## Results
 
-Results are presented in presentation `results.pdf`. Additionally to model performance report,
+Results are presented in presentation `results.pdf`. Additionally to the model performance report,
 a few conclusions are drawn.
 
 
-### Server API
+## Server API
 
