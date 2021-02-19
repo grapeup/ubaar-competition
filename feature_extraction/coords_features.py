@@ -65,3 +65,17 @@ def coords_clusters_kmeans(coords, n_clusters):
     dest_cluster = model.predict(coords[['destinationLatitude', 'destinationLongitude']])
 
     return src_cluster, dest_cluster
+
+
+def coord_features(data, features, do_clusters=True):
+    coords = data[['sourceLatitude', 'sourceLongitude', 'destinationLatitude', 'destinationLongitude']]
+    features['dmd'] = coords.apply(dummy_manhattan_distance, axis=1)
+    features['bearing_array'] = coords.apply(bearing_array, axis=1)
+    features['center_lat'] = coords.apply(center_lat_feat, axis=1)
+    features['center_lng'] = coords.apply(center_lng_feat, axis=1)
+
+    if do_clusters:
+        features['cluster_src_db'], features['cluster_dest_db'] = coords_clusters_dbscan(coords)
+        features['cluster_src_km'], features['cluster_dest_km'] = coords_clusters_kmeans(coords, n_clusters=120)
+
+    return features

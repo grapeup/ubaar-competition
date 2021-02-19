@@ -1,0 +1,32 @@
+openapi: "3.0.0"
+
+info:
+  title: Ubaar Competition API
+  version: "0.1"
+
+paths:
+  /predict:
+    post:
+      summary: Predict price for a given instance
+      operationId: app.predict
+      responses:
+        200:
+          description: Price
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "10000000.0"
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                row:
+                  description: "Row with data as in published data"
+                  type: string
+                  format: application/json
+                  example: "row=960218,36.666045,48.489706,زنجان,29.600574,52.537114,فارس,1092.0,751.0,treili,kafi,20.00,0"
