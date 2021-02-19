@@ -38,7 +38,7 @@ between the train and test sets (generalization on new transport sources)
 
 ## Results
 
-Results are presented in presentation `results.pdf`. Additionally to the model performance report,
+Results are presented in presentation `Ubaar conclusions.pdf`. Additionally to the model performance report,
 a few conclusions are drawn.
 
 
